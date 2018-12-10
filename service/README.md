@@ -1,4 +1,4 @@
-## gRPC service for implementation of [Semantic Modeling with LSTM Network](https://www.microsoft.com/en-us/research/wp-content/uploads/2017/02/LSTM_DSSM_IEEE_TASLP.pdf) [1]
+## gRPC service for [Semantic Modeling with LSTM Network](https://www.microsoft.com/en-us/research/wp-content/uploads/2017/02/LSTM_DSSM_IEEE_TASLP.pdf) implementation
 
 ## Installation 
 
@@ -6,7 +6,7 @@
       $ pip install grpcio-tools
       
       
-## setup
+## Setup
 
   - make sure you read the readme in the parent folder and installed all requirements
   - run the following command to generate gRPC classes for Python
@@ -17,10 +17,10 @@
 
   - you can use the sampling data available in data/DSSM
 
-  python client.py --train_file "PATH_TO_TRAIN_FILE" --validation_file "PATH_TO_VALIDATION_FILE" --query_wf "PATH_TO_QUESTION_VOCABULARY" --answer_wf "PATH_TO_ANSWER_VOCABULARY"
+        python client.py --train_file "PATH_TO_TRAIN_FILE" --validation_file "PATH_TO_VALIDATION_FILE" --query_wf "PATH_TO_QUESTION_VOCABULARY" --answer_wf "PATH_TO_ANSWER_VOCABULARY"
 
   optional arguments:
-      -h, --help            show this help message and exit
+      -h, --help show the ff help message and exit
       
       --train_file TRAIN_FILE
           path to the training file (for available sampling data use: data/DSSM/train.pair.tok.ctf)
