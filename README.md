@@ -1,2 +1,3 @@
 # DSSM-LSTM
-Deep Semantic Similarity Model with LSTM Networks
+
+gRPC service for Deep Semantic Similarity Model with LSTM Networks
