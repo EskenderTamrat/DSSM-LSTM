@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message Query {
+	string train_file = 1;
+	string validation_file = 2;
+	string query_wf = 3;
+	string answer_wf = 4;
+}
+
+message Rep {
+	string ans = 5;
+}
+
+service Reply {
+	rpc semantic_modeling (Query) returns (Rep) {}
+}
