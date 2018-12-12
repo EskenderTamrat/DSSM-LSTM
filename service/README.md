@@ -8,18 +8,19 @@
       
 ## Setup
 
-  - make sure you read the readme in the parent folder and installed all requirements
-  - run the following command to generate gRPC classes for Python
+  - Make sure you read the readme in the parent folder and installed all requirements
+  - Run the following command to generate gRPC classes for Python
 
         python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. LSTM.proto
 
 ## Runnig Demo
 
-  - you can use the sampling data available in data/DSSM
+  - You can use the sampling data available in data/DSSM
 
         python client.py --train_file "PATH_TO_TRAIN_FILE" --validation_file "PATH_TO_VALIDATION_FILE" --query_wf "PATH_TO_QUESTION_VOCABULARY" --answer_wf "PATH_TO_ANSWER_VOCABULARY"
 
-  optional arguments:
+    - Optional arguments:
+     
       -h, --help show the ff help message and exit
       
       --train_file TRAIN_FILE

@@ -1,32 +1,45 @@
 # DSSM with LSTM Model
 
-This service is an implementation of Deep Structured Semantic Model or Deep Semantic Similarity Model (DSSM) with LSTM Networks. It is forked from [CNTK 303: Deep Structured Semantic Modeling with LSTM](https://github.com/Microsoft/CNTK/blob/master/Tutorials/CNTK_303_Deep_Structured_Semantic_Modeling_with_LSTM_Networks.ipynb). Given a pair of documents, the model would map the inputs to a pair of feature vectors in a continuous, low dimensional space where one could compare the semantic similarity between the text strings using the cosine similarity between their vectors in that space. 
+This service is an implementation of Deep Structured Semantic Model or Deep Semantic Similarity Model (DSSM) with LSTM Networks. It is forked from [CNTK 303: Deep Structured Semantic Modeling with LSTM](https://github.com/Microsoft/CNTK/blob/master/Tutorials/CNTK_303_Deep_Structured_Semantic_Modeling_with_LSTM_Networks.ipynb).  
 
+## Deep Structured Semantic Model (DSSM)
 
-# Deep Structured Semantic Model (DSSM)
+DSSM is a Deep Neural Network (DNN) modeling technique for representing text strings in a continuous semantic space and modeling semantic similarity (a metric defined over a set of documents or terms where the distance between them based on the likeness of their semantic content or meaning) between text strings. Its application include information retrieval, web search ranking, ad selection/relevance, question answering and machine translation.
 
-
-
-
-
+Given a pair of documents, this model would map the inputs to a pair of feature vectors in a continuous, low dimensional space where one could compare the semantic similarity between the text strings using the cosine similarity between their vectors in that space.
 
 <p align="center"><img src="images/semantic_modeling.png?raw=true" alt="Semantic Modeling"></p>
 
 In the above figure, the given query (**Q**) and set of documents (**D_1, D_2, ..., D_n**) generate semantic features, which can then be used to generate pairwise distance metric.
 
-More details on the implementation could be found here: https://github.com/Microsoft/CNTK/blob/master/Tutorials/CNTK_303_Deep_Structured_Semantic_Modeling_with_LSTM_Networks.ipynb
+# Models
 
+The data set is preprocessed into two parts. There are Vocabulary files (one each for question and asnwers in .wl format) and CTF format question and answer files (CTF deserializer is used to read input data). 
 
+With [LSTM-RNN (Long-Short Term Memory and Recurrent Neural Network)](https://towardsdatascience.com/recurrent-neural-networks-and-lstm-4b601dd822a5)(1), it sequentially takes each word in a sentence, extracts its information, and embeds it into a semantic vector.
+
+<p align="center"><img src="images/query_vector.png?raw=true" alt="Semantic Feature"></p>
+
+The above figure illustrated how query_vector space projected with the semantic representation of sentences and there would be a similar projection for the answer_vector.
+
+## Parameters
+
+One could refine parameters associated with the network architecture at *Variables.txt*. Default values set to suite the sample model found in data/DSSM directory.
 
 ## Setup
 
-To download a sampling of QA dataset, run `python download.py`, which would populate data/DSSM with vocablary (WL format) and QA (CTF format) files
+To download a sampling of QA dataset, run `python download_model.py`, which would populate data/DSSM with vocablary (WL format) and QA (CTF format) files
 
 ## Usage
+
+Make changes to the parameter values at *Variables.txt* for testing with different specifications
+
 
 		cd service
 		#start the server 
 		python server.py
+
+Run the client-based code with parameters of the data set (two QA and two Vocabulary files)
 
 		#on a different terminal run 
 		python client.py --train_file "PATH_TO_TRAIN_FILE" --validation_file "PATH_TO_VALIDATION_FILE" --query_wf "PATH_TO_QUESTION_VOCABULARY" --answer_wf "PATH_TO_ANSWER_VOCABULARY"
@@ -51,6 +64,11 @@ Mapping from input stream to network inputs
 
 		Finished Evaluation [1]: Minibatch[1-35]: metric = 0.13% * 410;
 
+It will compute the cosine similarity between the query and answer pair with the higher value indicating a better answeer for the query.
 
 		Query to Answer similarity:0.9997578263282776
 		Query to poor-answer similarity:0.9997633099555969
+
+## References
+
+(1) https://towardsdatascience.com/recurrent-neural-networks-and-lstm-4b601dd822a5

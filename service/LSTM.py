@@ -4,13 +4,11 @@ from __future__ import print_function # Use a function definition from future ve
 import math
 import numpy as np
 import os
-
 import cntk as C
 import cntk.tests.test_utils
-
 import requests
-
 import imp
+from scipy.spatial.distance import cosine
 
 def create_reader(QRY_SIZE, ANS_SIZE, path, is_training):
   return C.io.MinibatchSource(C.io.CTFDeserializer(path, C.io.StreamDefs(
@@ -51,7 +49,6 @@ def create_loss(vector_a, vector_b):
   return 1 - qry_ans_similarity
 
 def create_trainer(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, reader, network):
-  
   # Setup the progress updater
   progress_writer = C.logging.ProgressPrinter(tag='Training', num_epochs=MAX_EPOCHS)
 
@@ -87,7 +84,7 @@ def create_trainer(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, reader, network):
   return C.Trainer(model, (network['loss'], network['error']), network['learner'], progress_writer)
 
 def do_train(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, network, trainer, train_source):
-  # define mapping from intput streams to network inputs
+	# define mapping from intput streams to network inputs
   input_map = {
       network['query']: train_source.streams.query,
       network['answer']: train_source.streams.answer
@@ -125,7 +122,6 @@ def do_validate(network, val_source):
   evaluator.summarize_test_progress()
 
 def lstm(train_file, validation_file, query_wf, answer_wf):
-	#3
 	# Define the vocabulary size (QRY-stands for question and ANS stands for answer)
 	getVarFromFile("../variables.txt")
 	QRY_SIZE = data.QRY_SIZE
@@ -152,7 +148,6 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 	else:
 	  raise ValueError("Cannot locate file {0} in current directory {1}".format(validation_file, os.getcwd()))
 
-	#6
 	# Create the containers for input feature (x) and the label (y)
 	axis_qry = C.Axis.new_unique_dynamic_axis('axis_qry')
 	qry = C.sequence.input_variable(QRY_SIZE, sequence_axis=axis_qry)
@@ -166,7 +161,7 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 
 	network['query'], network['axis_qry'] = qry, axis_qry
 	network['answer'], network['axis_ans'] = ans, axis_ans
-	#10
+	
 	# Model parameters
 	MAX_EPOCHS = data.MAX_EPOCHS
 	EPOCH_SIZE = data.EPOCH_SIZE
@@ -177,7 +172,6 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 	do_train(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, network, trainer, train_source)
 	do_validate(network, val_source)
 
-	#17
 	# load dictionaries
 	query_wl = [line.rstrip('\n') for line in open(query_wf)] #data['query']['file']
 	answers_wl = [line.rstrip('\n') for line in open(answer_wf)] #data['answer']['file']
@@ -185,9 +179,9 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 	answers_dict = {answers_wl[i]:i for i in range(len(answers_wl))}
 
 	# let's run a sequence through
-	qry = 'BOS what contribution did  e1  made to science in 1665 EOS'
-	ans = 'BOS book author book_editions_published EOS'
-	ans_poor = 'BOS language human_language main_country EOS'
+	qry = data.qry 
+	ans = data.ans 
+	ans_poor = data.ans_poor 
 
 	qry_idx = [query_dict[w+' '] for w in qry.split()] # convert to query word indices
 	#'Query Indices:', qry_idx)
@@ -198,7 +192,6 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 	ans_poor_idx = [answers_dict[w+' '] for w in ans_poor.split()] # convert to fake answer word indices
 	#'Poor Answer Indices:', ans_poor_idx)
 
-	#18
 	# Create the one hot representations
 	qry_onehot = np.zeros([len(qry_idx),len(query_dict)], np.float32)
 	for t in range(len(qry_idx)):
@@ -212,17 +205,11 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 	for t in range(len(ans_poor_idx)):
 	  ans_poor_onehot[t, ans_poor_idx[t]] = 1
 
-	#19
 	qry_embedding = network['query_vector'].eval([qry_onehot])
 	ans_embedding = network['answer_vector'].eval([ans_onehot])
 	ans_poor_embedding = network['answer_vector'].eval([ans_poor_onehot])
-
-	from scipy.spatial.distance import cosine
-
 	qry_ans_similarity = 1-cosine(qry_embedding, ans_embedding) 
 	qry_poor_ans_similarity = 1-cosine(qry_embedding, ans_poor_embedding)
-	#print(final)
-	#return final
 	return qry_ans_similarity, qry_poor_ans_similarity
 
 # Reading from file
