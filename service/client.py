@@ -22,4 +22,5 @@ if __name__ == "__main__":
 		parser.print_help()
 		sys.exit()
 	response = stub.semantic_modeling(LSTM_pb2.Query(train_file = args.train_file, validation_file = args.validation_file, query_wf = args.query_wf, answer_wf = args.answer_wf))	
-	print(response.ans)
+	print("Query to Answer similarity: ", response.qry_ans_similarity)
+	print("Query to poor-answer similarity: ", response.qry_poor_ans_similarity)

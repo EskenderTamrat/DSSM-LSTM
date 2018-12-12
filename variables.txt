@@ -1,0 +1,10 @@
+QRY_SIZE = 1204
+ANS_SIZE = 1019
+EMB_DIM   = 25 # Embedding dimension
+HIDDEN_DIM = 50 # LSTM dimension
+DSSM_DIM = 25 # Dense layer dimension  
+NEGATIVE_SAMPLES = 5
+DROPOUT_RATIO = 0.2
+MAX_EPOCHS = 5
+EPOCH_SIZE = 10000
+MINIBATCH_SIZE = 50

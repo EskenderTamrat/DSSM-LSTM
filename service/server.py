@@ -9,8 +9,8 @@ import LSTM
 
 class ReplyServicer(LSTM_pb2_grpc.ReplyServicer):
 	def semantic_modeling(self, request, context):
-		response = LSTM_pb2.Rep()
-		response.ans = LSTM.lstm(request.train_file, request.validation_file, request.query_wf, request.answer_wf)
+		response = LSTM_pb2.Response()
+		response.qry_ans_similarity, response.qry_poor_ans_similarity = LSTM.lstm(request.train_file, request.validation_file, request.query_wf, request.answer_wf)
 		return response
 
 # create a gRPC server

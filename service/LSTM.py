@@ -10,6 +10,8 @@ import cntk.tests.test_utils
 
 import requests
 
+import imp
+
 def create_reader(QRY_SIZE, ANS_SIZE, path, is_training):
   return C.io.MinibatchSource(C.io.CTFDeserializer(path, C.io.StreamDefs(
        query = C.io.StreamDef(field='S0', shape=QRY_SIZE,  is_sparse=True),
@@ -125,13 +127,14 @@ def do_validate(network, val_source):
 def lstm(train_file, validation_file, query_wf, answer_wf):
 	#3
 	# Define the vocabulary size (QRY-stands for question and ANS stands for answer)
-	QRY_SIZE = 1204
-	ANS_SIZE = 1019
-	EMB_DIM   = 25 # Embedding dimension
-	HIDDEN_DIM = 50 # LSTM dimension
-	DSSM_DIM = 25 # Dense layer dimension  
-	NEGATIVE_SAMPLES = 5
-	DROPOUT_RATIO = 0.2
+	getVarFromFile("../variables.txt")
+	QRY_SIZE = data.QRY_SIZE
+	ANS_SIZE = data.ANS_SIZE
+	EMB_DIM  = data.EMB_DIM # Embedding dimension
+	HIDDEN_DIM = data.HIDDEN_DIM # LSTM dimension
+	DSSM_DIM = data.DSSM_DIM # Dense layer dimension  
+	NEGATIVE_SAMPLES = data.NEGATIVE_SAMPLES
+	DROPOUT_RATIO = data.DROPOUT_RATIO
 	# Create the containers for input feature (x) and the label (y)
 	qry = C.sequence.input_variable(QRY_SIZE)
 	ans = C.sequence.input_variable(ANS_SIZE)
@@ -165,9 +168,9 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 	network['answer'], network['axis_ans'] = ans, axis_ans
 	#10
 	# Model parameters
-	MAX_EPOCHS = 5
-	EPOCH_SIZE = 10000
-	MINIBATCH_SIZE = 50
+	MAX_EPOCHS = data.MAX_EPOCHS
+	EPOCH_SIZE = data.EPOCH_SIZE
+	MINIBATCH_SIZE = data.MINIBATCH_SIZE
 
 	# Instantiate the trainer
 	trainer = create_trainer(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, train_source, network)
@@ -216,11 +219,19 @@ def lstm(train_file, validation_file, query_wf, answer_wf):
 
 	from scipy.spatial.distance import cosine
 
-	#print('Query to Answer similarity:', 1-cosine(qry_embedding, ans_embedding))
-	final = "Query to Answer similarity:" + str(1-cosine(qry_embedding, ans_embedding)) 
-	final += "\nQuery to poor-answer similarity:" + str(1-cosine(qry_embedding, ans_poor_embedding))
-	print(final)
-	return final
+	qry_ans_similarity = 1-cosine(qry_embedding, ans_embedding) 
+	qry_poor_ans_similarity = 1-cosine(qry_embedding, ans_poor_embedding)
+	#print(final)
+	#return final
+	return qry_ans_similarity, qry_poor_ans_similarity
+
+# Reading from file
+def getVarFromFile(filename):
+    f = open(filename)
+    global data
+    data = imp.load_source('data', '', f)
+    f.close()
+    return data
 
 if __name__ == "__main__":
 	print(lstm("data/DSSM/train.pair.tok.ctf", "data/DSSM/valid.pair.tok.ctf", "data/DSSM/vocab_Q.wl", "data/DSSM/vocab_A.wl"))

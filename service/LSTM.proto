@@ -7,10 +7,11 @@ message Query {
 	string answer_wf = 4;
 }
 
-message Rep {
-	string ans = 5;
+message Response {
+	float qry_ans_similarity = 5;
+	float qry_poor_ans_similarity = 6;
 }
 
 service Reply {
-	rpc semantic_modeling (Query) returns (Rep) {}
+	rpc semantic_modeling (Query) returns (Response) {}
 }
