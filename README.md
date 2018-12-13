@@ -28,7 +28,7 @@ One could refine parameters associated with the network architecture at *Variabl
 
 ## Setup
 
-To download a sampling of QA dataset, run `python download_model.py`, which would populate data/DSSM with vocablary (WL format) and QA (CTF format) files
+A sampling of QA dataset is populated in data/DSSM with vocablary (WL format) and QA (CTF format) files, which would populate data/DSSM 
 
 Set up a virtualenv
 	
