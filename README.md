@@ -16,7 +16,7 @@ In the above figure, the given query (**Q**) and set of documents (**D_1, D_2, .
 
 The data set is preprocessed into two parts. There are Vocabulary files (one each for question and asnwers in .wl format) and CTF format question and answer files (CTF deserializer is used to read input data). 
 
-With [LSTM-RNN (Long-Short Term Memory and Recurrent Neural Network)](https://towardsdatascience.com/recurrent-neural-networks-and-lstm-4b601dd822a5)(1), it sequentially takes each word in a sentence, extracts its information, and embeds it into a semantic vector.
+With LSTM-RNN (Long-Short Term Memory and Recurrent Neural Network) (1), it sequentially takes each word in a sentence, extracts its information, and embeds it into a semantic vector.
 
 <p align="center"><img src="images/query_vector.png?raw=true" alt="Semantic Feature"></p>
 
@@ -30,8 +30,7 @@ One could refine parameters associated with the network architecture at *Variabl
 
 To download a sampling of QA dataset, run `python download_model.py`, which would populate data/DSSM with vocablary (WL format) and QA (CTF format) files
 
-
-## Requirements Installation
+Install required packages 
 
       pip install -r requirements.txt
 
