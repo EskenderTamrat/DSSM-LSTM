@@ -1,11 +1,5 @@
 ## gRPC service for [Semantic Modeling with LSTM Network](https://www.microsoft.com/en-us/research/wp-content/uploads/2017/02/LSTM_DSSM_IEEE_TASLP.pdf) implementation
 
-## Installation 
-
-      $ pip install grpcio
-      $ pip install grpcio-tools
-      
-      
 ## Setup
 
   - Make sure you read the readme in the parent folder and installed all requirements
@@ -13,7 +7,7 @@
 
         python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. LSTM.proto
 
-## Runnig Demo
+## Running Demo
 
   - You can use the sampling data available in data/DSSM
 
@@ -30,4 +24,4 @@
       --query_wf QUERY_WF   
           path to the vocabulary file for questions (for available sampling data use: data/DSSM/vocab.Q.wl)
       --answer_wf ANSWER_WF
-        path to the vocabulary file for answers (for available sampling data use: data/DSSM/vocab.A.wl)
+          path to the vocabulary file for answers (for available sampling data use: data/DSSM/vocab.A.wl)

@@ -30,6 +30,11 @@ One could refine parameters associated with the network architecture at *Variabl
 
 To download a sampling of QA dataset, run `python download_model.py`, which would populate data/DSSM with vocablary (WL format) and QA (CTF format) files
 
+
+## Requirements Installation
+
+      pip install -r requirements.txt
+
 ## Usage
 
 Make changes to the parameter values at *Variables.txt* for testing with different specifications
