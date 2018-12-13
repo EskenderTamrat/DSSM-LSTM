@@ -1,3 +1,6 @@
+cntk
 numpy
+requests
+pytest
 grpcio
 grpcio-tools

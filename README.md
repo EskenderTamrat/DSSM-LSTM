@@ -30,9 +30,17 @@ One could refine parameters associated with the network architecture at *Variabl
 
 To download a sampling of QA dataset, run `python download_model.py`, which would populate data/DSSM with vocablary (WL format) and QA (CTF format) files
 
+Set up a virtualenv
+	
+	  	mkvirtualenv --python=/usr/bin/python3.6 semantic-modeling
+
 Install required packages 
 
-      pip install -r requirements.txt
+      	pip install -r requirements.txt
+
+Run the following command to generate gRPC classes for Python
+
+        python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. LSTM.proto
 
 ## Usage
 

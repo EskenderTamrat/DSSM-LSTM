@@ -3,9 +3,6 @@
 ## Setup
 
   - Make sure you read the readme in the parent folder and installed all requirements
-  - Run the following command to generate gRPC classes for Python
-
-        python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. LSTM.proto
 
 ## Running Demo
 
