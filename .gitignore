@@ -9,4 +9,8 @@ ENV/
 env.bak/
 venv.bak/
 
-data/DSSM
+#gRPC
+*_pb2.py
+*_pb2_grpc.py
+
+data/
