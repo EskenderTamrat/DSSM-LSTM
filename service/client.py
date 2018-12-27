@@ -9,7 +9,7 @@ import sys
 parser = argparse.ArgumentParser()
 
 # open a gRPC channel
-channel = grpc.insecure_channel('localhost:50051')
+channel = grpc.insecure_channel('localhost:8001')
 stub = LSTM_pb2_grpc.ReplyStub(channel)
 
 if __name__ == "__main__":
