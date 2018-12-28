@@ -32,6 +32,6 @@ WORKDIR /DSSM-LSTM
 #EXPOSE jsonrpc port
 EXPOSE 8001
 
-RUN python3.6 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service/LSTM.proto
+RUN python3.6 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service_spec/LSTM.proto
 
-CMD [ "python3.6" , "service/server.py" ]
+CMD [ "python3.6" , "server.py" ]
