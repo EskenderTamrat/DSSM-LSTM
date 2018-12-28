@@ -123,7 +123,7 @@ def do_validate(network, val_source):
 
 def lstm(train_file, validation_file, query_wf, answer_wf):
 	# Define the vocabulary size (QRY-stands for question and ANS stands for answer)
-	getVarFromFile("../variables.txt")
+	getVarFromFile("variables.txt")
 	QRY_SIZE = data.QRY_SIZE
 	ANS_SIZE = data.ANS_SIZE
 	EMB_DIM  = data.EMB_DIM # Embedding dimension
