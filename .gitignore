@@ -12,6 +12,3 @@ venv.bak/
 #gRPC
 *_pb2.py
 *_pb2_grpc.py
-
-#model
-data/

@@ -1,6 +1,5 @@
 FROM ubuntu:16.04
 
-
 RUN apt-get update
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa -y
@@ -34,6 +33,6 @@ WORKDIR /DSSM-LSTM
 #EXPOSE jsonrpc port
 EXPOSE 8001
 
-RUN python3.6 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service_spec/LSTM.proto
+RUN python3.6 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service_spec/DSSMService.proto
 
-CMD [ "python3.6" , "server.py" ]
+CMD [ "python3.6" , "script.py" ]

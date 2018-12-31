@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message DSSMRequest {
+	string qry = 1;
+	string ans1 = 2;
+	string ans2 = 3;
+}
+
+message DSSMResponse {
+	float qry_ans_similarity = 1;
+	float qry_ans2_similarity = 2;
+}
+
+service DSSM {
+	rpc semantic_modeling (DSSMRequest) returns (DSSMResponse) {}
+}

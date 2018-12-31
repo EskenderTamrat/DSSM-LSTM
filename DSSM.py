@@ -79,7 +79,6 @@ def create_trainer(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, reader, network):
 
   network['learner'] = dssm_learner
 
-  #print('Using local learner')
   # Create trainer
   return C.Trainer(model, (network['loss'], network['error']), network['learner'], progress_writer)
 
@@ -121,104 +120,103 @@ def do_validate(network, val_source):
 
   evaluator.summarize_test_progress()
 
-def lstm(train_file, validation_file, query_wf, answer_wf):
-	# Define the vocabulary size (QRY-stands for question and ANS stands for answer)
-	getVarFromFile("variables.txt")
-	QRY_SIZE = data.QRY_SIZE
-	ANS_SIZE = data.ANS_SIZE
-	EMB_DIM  = data.EMB_DIM # Embedding dimension
-	HIDDEN_DIM = data.HIDDEN_DIM # LSTM dimension
-	DSSM_DIM = data.DSSM_DIM # Dense layer dimension  
-	NEGATIVE_SAMPLES = data.NEGATIVE_SAMPLES
-	DROPOUT_RATIO = data.DROPOUT_RATIO
-	# Create the containers for input feature (x) and the label (y)
-	qry = C.sequence.input_variable(QRY_SIZE)
-	ans = C.sequence.input_variable(ANS_SIZE)
-	#train_file = "data/DSSM/train.pair.tok.ctf" # data['train']['file']
-	
-	if os.path.exists(train_file):
-		train_source = create_reader(QRY_SIZE, ANS_SIZE, train_file, True)
-	else:
-		raise ValueError("Cannot locate file {0} in current directory {1}".format(train_file, os.getcwd()))
+def lstm(qry, ans, ans2):
+  # Read vocabulary size (QRY-stands for question and ANS stands for answer) and model used from a file 
+  value = getVarFromFile("variables.txt")
+  QRY_SIZE = value.QRY_SIZE
+  ANS_SIZE = value.ANS_SIZE
+  EMB_DIM  = value.EMB_DIM # Embedding dimension
+  HIDDEN_DIM = value.HIDDEN_DIM # LSTM dimension
+  DSSM_DIM = value.DSSM_DIM # Dense layer dimension  
+  NEGATIVE_SAMPLES = value.NEGATIVE_SAMPLES
+  DROPOUT_RATIO = value.DROPOUT_RATIO
+  train_file = value.train_file
+  validation_file = value.validation_file
+  query_wf = value.query_wf
+  answer_wf = value.answer_wf
+  # Model parameters
+  MAX_EPOCHS = value.MAX_EPOCHS
+  EPOCH_SIZE = value.EPOCH_SIZE
+  MINIBATCH_SIZE = value.MINIBATCH_SIZE
 
-	#validation_file = "data/DSSM/valid.pair.tok.ctf" # data['val']['file']
-	
-	if os.path.exists(validation_file):
-	  val_source = create_reader(QRY_SIZE, ANS_SIZE, validation_file, False)
-	else:
-	  raise ValueError("Cannot locate file {0} in current directory {1}".format(validation_file, os.getcwd()))
+  # Create the containers for input feature (x) and the label (y)
+  qryLabel = C.sequence.input_variable(QRY_SIZE)
+  ansLabel = C.sequence.input_variable(ANS_SIZE)
 
-	# Create the containers for input feature (x) and the label (y)
-	axis_qry = C.Axis.new_unique_dynamic_axis('axis_qry')
-	qry = C.sequence.input_variable(QRY_SIZE, sequence_axis=axis_qry)
+  if os.path.exists(train_file):
+  	train_source = create_reader(QRY_SIZE, ANS_SIZE, train_file, True)
+  else:
+  	raise ValueError("Cannot locate file {0} in current directory {1}".format(train_file, os.getcwd()))
 
-	axis_ans = C.Axis.new_unique_dynamic_axis('axis_ans')
-	ans = C.sequence.input_variable(ANS_SIZE, sequence_axis=axis_ans)
+  if os.path.exists(validation_file):
+    val_source = create_reader(QRY_SIZE, ANS_SIZE, validation_file, False)
+  else:
+    raise ValueError("Cannot locate file {0} in current directory {1}".format(validation_file, os.getcwd()))
+
+  # Create the containers for input feature (x) and the label (y)
+  axis_qry = C.Axis.new_unique_dynamic_axis('axis_qry')
+  qryLabel = C.sequence.input_variable(QRY_SIZE, sequence_axis=axis_qry)
+
+  axis_ans = C.Axis.new_unique_dynamic_axis('axis_ans')
+  ansLabel = C.sequence.input_variable(ANS_SIZE, sequence_axis=axis_ans)
 
 
-	# Create the model and store reference in `network` dictionary
-	network = create_model(EMB_DIM, DSSM_DIM, DROPOUT_RATIO, HIDDEN_DIM, qry, ans)
+  # Create the model and store reference in `network` dictionary
+  network = create_model(EMB_DIM, DSSM_DIM, DROPOUT_RATIO, HIDDEN_DIM, qryLabel, ansLabel)
 
-	network['query'], network['axis_qry'] = qry, axis_qry
-	network['answer'], network['axis_ans'] = ans, axis_ans
-	
-	# Model parameters
-	MAX_EPOCHS = data.MAX_EPOCHS
-	EPOCH_SIZE = data.EPOCH_SIZE
-	MINIBATCH_SIZE = data.MINIBATCH_SIZE
+  network['query'], network['axis_qry'] = qryLabel, axis_qry
+  network['answer'], network['axis_ans'] = ansLabel, axis_ans
 
-	# Instantiate the trainer
-	trainer = create_trainer(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, train_source, network)
-	do_train(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, network, trainer, train_source)
-	do_validate(network, val_source)
+  # Instantiate the trainer
+  trainer = create_trainer(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, train_source, network)
+  do_train(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, network, trainer, train_source)
+  do_validate(network, val_source)
+  # load dictionaries
 
-	# load dictionaries
-	query_wl = [line.rstrip('\n') for line in open(query_wf)] #data['query']['file']
-	answers_wl = [line.rstrip('\n') for line in open(answer_wf)] #data['answer']['file']
-	query_dict = {query_wl[i]:i for i in range(len(query_wl))}
-	answers_dict = {answers_wl[i]:i for i in range(len(answers_wl))}
+  queryf = open(query_wf)
+  ansf = open(answer_wf)
+  query_wl = [line.rstrip('\n') for line in queryf]
+  answers_wl = [line.rstrip('\n') for line in ansf]
+  query_dict = {query_wl[i]:i for i in range(len(query_wl))}
+  answers_dict = {answers_wl[i]:i for i in range(len(answers_wl))}
+  queryf.close()
+  ansf.close()
+  
+  # let's run a sequence through
+  qry_idx = [query_dict[w+' '] for w in qry.split()] # convert to query word indices
+  #'Query Indices:', qry_idx)
+  print("QRY_IDX: ", qry_idx)
+  ans_idx = [answers_dict[w+' '] for w in ans.split()] # convert to answer word indices
+  print("ANS IDX: ", ans_idx)
+  #'Answer Indices:', ans_idx)
 
-	# let's run a sequence through
-	qry = data.qry 
-	ans = data.ans 
-	ans_poor = data.ans_poor 
+  ans2_idx = [answers_dict[w+' '] for w in ans2.split()] # convert to fake answer word indices
+  #'Answer2 Indices:', ans2_idx)
+  print("ANS2 ANs IDX: ", ans2_idx)
+  # Create the one hot representations
+  qry_onehot = np.zeros([len(qry_idx),len(query_dict)], np.float32)
+  for t in range(len(qry_idx)):
+    qry_onehot[t,qry_idx[t]] = 1
+      
+  ans_onehot = np.zeros([len(ans_idx),len(answers_dict)], np.float32)
+  for t in range(len(ans_idx)):
+    ans_onehot[t,ans_idx[t]] = 1
+      
+  ans2_onehot = np.zeros([len(ans2_idx),len(answers_dict)], np.float32)
+  for t in range(len(ans2_idx)):
+    ans2_onehot[t, ans2_idx[t]] = 1
 
-	qry_idx = [query_dict[w+' '] for w in qry.split()] # convert to query word indices
-	#'Query Indices:', qry_idx)
-
-	ans_idx = [answers_dict[w+' '] for w in ans.split()] # convert to answer word indices
-	#'Answer Indices:', ans_idx)
-
-	ans_poor_idx = [answers_dict[w+' '] for w in ans_poor.split()] # convert to fake answer word indices
-	#'Poor Answer Indices:', ans_poor_idx)
-
-	# Create the one hot representations
-	qry_onehot = np.zeros([len(qry_idx),len(query_dict)], np.float32)
-	for t in range(len(qry_idx)):
-	  qry_onehot[t,qry_idx[t]] = 1
-	    
-	ans_onehot = np.zeros([len(ans_idx),len(answers_dict)], np.float32)
-	for t in range(len(ans_idx)):
-	  ans_onehot[t,ans_idx[t]] = 1
-	    
-	ans_poor_onehot = np.zeros([len(ans_poor_idx),len(answers_dict)], np.float32)
-	for t in range(len(ans_poor_idx)):
-	  ans_poor_onehot[t, ans_poor_idx[t]] = 1
-
-	qry_embedding = network['query_vector'].eval([qry_onehot])
-	ans_embedding = network['answer_vector'].eval([ans_onehot])
-	ans_poor_embedding = network['answer_vector'].eval([ans_poor_onehot])
-	qry_ans_similarity = 1-cosine(qry_embedding, ans_embedding) 
-	qry_poor_ans_similarity = 1-cosine(qry_embedding, ans_poor_embedding)
-	return qry_ans_similarity, qry_poor_ans_similarity
+  qry_embedding = network['query_vector'].eval([qry_onehot])
+  ans_embedding = network['answer_vector'].eval([ans_onehot])
+  ans2_embedding = network['answer_vector'].eval([ans2_onehot])
+  qry_ans_similarity = 1-cosine(qry_embedding, ans_embedding) 
+  qry_ans2_similarity = 1-cosine(qry_embedding, ans2_embedding)
+  return qry_ans_similarity, qry_ans2_similarity
 
 # Reading from file
 def getVarFromFile(filename):
-    f = open(filename)
-    global data
-    data = imp.load_source('data', '', f)
-    f.close()
-    return data
-
-if __name__ == "__main__":
-	print(lstm("data/DSSM/train.pair.tok.ctf", "data/DSSM/valid.pair.tok.ctf", "data/DSSM/vocab_Q.wl", "data/DSSM/vocab_A.wl"))
+  f = open(filename)
+  global data
+  data = imp.load_source('data', '', f)
+  f.close()
+  return data

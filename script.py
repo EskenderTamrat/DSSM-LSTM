@@ -2,20 +2,20 @@ import grpc
 from concurrent import futures
 import time
 
-from service_spec.LSTM_pb2 import Query, Response
-from service_spec.LSTM_pb2_grpc import ReplyServicer, add_ReplyServicer_to_server
+from service_spec.DSSMService_pb2 import DSSMRequest, DSSMResponse
+from service_spec.DSSMService_pb2_grpc import DSSMServicer, add_DSSMServicer_to_server
 
-from LSTM import lstm
+from DSSM import lstm
 
-class ReplyServicer(ReplyServicer):
+class DSSMServicer(DSSMServicer):
 	def semantic_modeling(self, request, context):
-		response = Response()
-		response.qry_ans_similarity, response.qry_poor_ans_similarity = lstm(request.train_file, request.validation_file, request.query_wf, request.answer_wf)
+		response = DSSMResponse()
+		response.qry_ans_similarity, response.qry_ans2_similarity = lstm(request.qry, request.ans1, request.ans2)
 		return response
 
 def create_server(port=8001):
 	server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-	add_ReplyServicer_to_server(ReplyServicer(), server)
+	add_DSSMServicer_to_server(DSSMServicer(), server)
 	print('Starting server. Listening on port 8001.')
 	server.add_insecure_port('[::]:' + str(port))
 	return server

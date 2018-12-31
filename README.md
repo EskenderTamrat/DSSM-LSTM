@@ -61,7 +61,7 @@ Run the client-based code with parameters of the data set (two QA and two Vocabu
 
 The results for running the service with the sampling of QA data set:
 
-		python client.py --train_file "../data/DSSM/train.pair.tok.ctf" --validation_file "../data/DSSM/valid.pair.tok.ctf" --query_wf "../data/DSSM/vocab_Q.wl" --answer_wf "../data/DSSM/vocab_A.wl"
+		python client.py --train_file "data/DSSM/train.pair.tok.ctf" --validation_file "data/DSSM/valid.pair.tok.ctf" --query_wf "data/DSSM/vocab_Q.wl" --answer_wf "data/DSSM/vocab_A.wl"
 
 Mapping from input stream to network inputs
 
