@@ -184,15 +184,9 @@ def lstm(qry, ans, ans2):
   
   # let's run a sequence through
   qry_idx = [query_dict[w+' '] for w in qry.split()] # convert to query word indices
-  #'Query Indices:', qry_idx)
-  print("QRY_IDX: ", qry_idx)
   ans_idx = [answers_dict[w+' '] for w in ans.split()] # convert to answer word indices
-  print("ANS IDX: ", ans_idx)
-  #'Answer Indices:', ans_idx)
-
   ans2_idx = [answers_dict[w+' '] for w in ans2.split()] # convert to fake answer word indices
-  #'Answer2 Indices:', ans2_idx)
-  print("ANS2 ANs IDX: ", ans2_idx)
+  
   # Create the one hot representations
   qry_onehot = np.zeros([len(qry_idx),len(query_dict)], np.float32)
   for t in range(len(qry_idx)):
