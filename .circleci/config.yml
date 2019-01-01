@@ -6,8 +6,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install requirements
-          command: python3.6 -m pip install -r requirements.txt
+          name: install GRPC
+          command: python3.6 -m pip install grpcio grpcio-tools
       - run:
           name: Generate GRPC files
           command: cd service_spec && python3.6 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. DSSMService.proto

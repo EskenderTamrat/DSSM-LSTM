@@ -40,15 +40,17 @@ Install required packages
 
 Run the following commad to generate gRPC class for Python
 
-		 python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service_spec/DSSMService.proto
+		python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service_spec/DSSMService.proto
 
 # Using docker
 ```bash
-docker build . -t singnet:semmodeling
+		docker build . -t singnet:semmodeling
 ```
 # How to use the docker image
+
 To run with grpc endpoint
-docker run -it --rm -p 8001:8001 singnet:semmodeling python3.6 script.py
+
+		docker run -it --rm -p 8001:8001 singnet:semmodeling python3.6 script.py
 
 # Running the service
 
@@ -62,7 +64,9 @@ The service accepts a query and two answers phrases. The query and answers entry
 # Licenses
 
 Microsoft Cognitive Toolkit (CNTK)
+
 Copyright (c) Microsoft Corporation. All rights reserved.
+
 MIT License
 
 ## References
