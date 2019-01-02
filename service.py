@@ -56,4 +56,4 @@ if __name__ == "__main__":
 		response = stub.semantic_modeling(DSSMRequest(qry = args.qry, ans1 = args.ans1, ans2 = args.ans2))
 		print("Query to Answer similarity: ", response.qry_ans_similarity)
 		print("Query to Answer 2 similarity: ", response.qry_ans2_similarity)
-		print(max(args.ans1, args.ans2), " is a better answer for ", args.qry)
+		print("\"", max(args.ans1, args.ans2), "\" is a better answer for \"", args.qry, )

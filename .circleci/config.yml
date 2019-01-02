@@ -14,7 +14,7 @@ jobs:
       - run: 
           name: Run Tests
           command: python3.6 -m unittest test_grpc_call.TestSuiteGrpc
-          no_output_timeout: 15m
+          no_output_timeout: 45m
 workflows:
   version: 2
   build_and_test:

@@ -170,6 +170,7 @@ def lstm(qry, ans, ans2):
   # Instantiate the trainer
   trainer = create_trainer(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, train_source, network)
   do_train(MAX_EPOCHS, EPOCH_SIZE, MINIBATCH_SIZE, network, trainer, train_source)
+  # put the network from the training into model dir
   do_validate(network, val_source)
   # load dictionaries
 
