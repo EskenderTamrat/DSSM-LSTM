@@ -33,32 +33,37 @@ One could refine parameters associated with the network architecture at *Variabl
 A sampling of QA dataset is populated in *data* with vocablary (WL format) and QA (CTF format) files, which would populate data/DSSM 
 
 Set up a virtualenv
-	
-	  	mkvirtualenv --python=/usr/bin/python3.6 semantic-modeling
-
+```bash	
+mkvirtualenv --python=/usr/bin/python3.6 semantic-modeling
+```
 Install required packages 
-
-      	pip install -r requirements.txt
-
+```bash	
+pip install -r requirements.txt
+```	
 Run the following commad to generate gRPC class for Python
-
-		python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service_spec/DSSMService.proto
-
+```bash
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service_spec/DSSMService.proto
+```
 # Using docker
 ```bash
-		docker build . -t singnet:semmodeling
+docker build . -t singnet:semmodeling
 ```
 # How to use the docker image
 
 To run with grpc endpoint
-
-		docker run -it --rm -p 8001:8001 singnet:semmodeling python3.6 script.py
-
+```bash
+docker run -it --rm -p 8001:8001 singnet:semmodeling python3.6 script.py
+```
 # Running the service
 
 The service accepts a query and two answers phrases. The query and answers entry should be from the available sample data for the service to create vector representation and compute the similarity.  
-
-		python3.6 service.py --qry=qry_string --ans1=first_answer --ans2=second_answer
+```bash
+python3.6 service.py --qry=qry_string --ans1=first_answer --ans2=second_answer
+```
+Example usage:
+```bash
+python3.6 service.py --qry="what contribution did you made to science" --ans="book author book_editions_published" --ans2="activism address adjoining_relationship"
+```
 
 # Authors
 - Eskender Tamrat - Maintainer - [SingularityNet.io](https://singularitynet.io)
