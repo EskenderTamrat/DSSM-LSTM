@@ -33,8 +33,8 @@ DSSMRequest(qry="what contribution did you made to science", ans1 ="book author 
 
 ```bash
 {
-qry_ans_similarity: 0.9998714923858643,
-qry_ans2_similarity: 0.9998154044151306,
+qry_ans_similarity: 0.99989253282547,
+qry_ans2_similarity: 0.9998538494110107,
 }
 ```
 If the user's input for query and answers include words that doesn't exist in the vocabulary, it returns the message that you should use terms from available sample data.
