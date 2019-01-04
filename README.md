@@ -58,11 +58,11 @@ docker run -it --rm -p 8001:8001 singnet:semmodeling python3.6 script.py
 
 The service accepts a query and two answers phrases. The query and answers entry should be from the available sample data for the service to create vector representation and compute the similarity.  
 ```bash
-python3.6 service.py --qry=qry_string --ans1=first_answer --ans2=second_answer
+python3.6 service.py --qry qry_string --ans1 first_answer --ans2 second_answer
 ```
 Example usage:
 ```bash
-python3.6 service.py --qry="what contribution did you made to science" --ans="book author book_editions_published" --ans2="activism address adjoining_relationship"
+python3.6 service.py --qry "what contribution did you made to science" --ans1 "book author book_editions_published" --ans2 "activism address adjoining_relationship"
 ```
 
 # Authors
