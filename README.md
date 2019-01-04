@@ -1,5 +1,6 @@
 ![singnetlogo](docs/assets/singnet-logo.jpg?raw=true 'SingularityNET')
 
+[![CircleCI](https://circleci.com/gh/EskenderTamrat/DSSM-LSTM.svg?style=svg)](https://circleci.com/gh/EskenderTamrat/DSSM-LSTM)
 # Deep Structured Semantic Modeling with LSTM Networks
 
 This service is an implementation of Deep Structured Semantic Model or Deep Semantic Similarity Model (DSSM) with LSTM Networks. Given a query and a pair of answers from the sample data the network trained, it returns the better answer based on the cosine similarity. It is forked from [CNTK 303: Deep Structured Semantic Modeling with LSTM](https://github.com/Microsoft/CNTK/blob/master/Tutorials/CNTK_303_Deep_Structured_Semantic_Modeling_with_LSTM_Networks.ipynb).  
