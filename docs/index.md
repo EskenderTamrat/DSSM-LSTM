@@ -1,4 +1,6 @@
-![singnetlogo](../assets/singnet-logo.jpg?raw=true 'SingularityNET')
+![singnetlogo](./assets/singnet-logo.jpg?raw=true 'SingularityNET')
+
+[![CircleCI](https://circleci.com/gh/EskenderTamrat/DSSM-LSTM.svg?style=svg)](https://circleci.com/gh/EskenderTamrat/DSSM-LSTM)
 
 # DSSM with LSTM Network Service
 ## Service User's Guide
