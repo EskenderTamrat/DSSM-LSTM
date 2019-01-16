@@ -57,7 +57,7 @@ docker run -it --rm -p 8001:8001 singnet:semmodeling python3.6 script.py
 ```
 # Running the service
 
-The service accepts a query and two answers phrases. The query and answers entry should be from the available sample data for the service to create vector representation and compute the similarity.  
+The service accepts a query and two answers phrases. The query and answers entry should have terms from the available sample data for the service to create vector representation and compute the similarity.  
 ```bash
 python3.6 service.py --qry qry_string --ans1 first_answer --ans2 second_answer
 ```

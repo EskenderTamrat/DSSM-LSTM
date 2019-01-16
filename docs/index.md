@@ -11,7 +11,7 @@ It provides the trained model as service for semantic modeling given query and a
 
 ### How does it work?
 
-The user must provide a request satisfying the proto descriptions [given](../../service_spec/DSSMService.proto).
+The user must provide a request satisfying the proto descriptions [given](../service_spec/DSSMService.proto).
 
 * A request with qry: a pharase with words that exist in the sample model vocabluary (../../data/vocab_Q.wl) 
             
@@ -37,4 +37,16 @@ qry_ans_similarity: 0.99989253282547,
 qry_ans2_similarity: 0.9998538494110107,
 }
 ```
-If the user's input for query and answers include words that doesn't exist in the vocabulary, it returns the message that you should use terms from available sample data.
+If the user's input for query and answers doesn't include words that doesn't exist in the vocabulary, it returns the message that you should add terms from available sample data.
+
+```bash
+Your query entry doesn't include terms that exist in the model
+```
+
+```bash
+Your entry for first answer doesn't include terms that exist in the model
+```
+
+```bash
+Your entry for second answer doesn't include terms that exist in the model
+```

@@ -10,15 +10,15 @@ from service_spec.DSSMService_pb2_grpc import DSSMStub
 
 def searchWord(string, file):
   with open(file) as myfile:
-    for word in string.split():
-      if word in myfile.read():
-        myfile.seek(0)
-      else:
-        print("\"", word, "\" doesn't exist in the model")
-        myfile.close()
-        return False
+  	if string.strip():
+	    for word in string.split(" "):
+	    	if word in myfile.read():
+	    		myfile.seek(0)
+	    	else:
+		      string = string.replace(word, "")
+		      myfile.seek(0)
   myfile.close()
-  return True
+  return string
 
 # Reading from file
 def getVarFromFile(filename):
@@ -46,14 +46,18 @@ if __name__ == "__main__":
 
   # Check whether user's query and answers list suits the model 
 	data = getVarFromFile("variables.txt")
-	if not searchWord(args.qry, data.query_wf):
-		print("Your query entry doesn't exist in the model.")
-	elif not searchWord(args.ans1, data.answer_wf):
- 		print("Your first answer entry doesn't exist in the model")
-	elif not searchWord(args.ans2, data.answer_wf):
-		print("Your second answer entry doesn't exist in the model")
+	qry = searchWord(args.qry, data.query_wf)
+	ans_1 = searchWord(args.ans1, data.answer_wf)
+	ans_2 = searchWord(args.ans2, data.answer_wf)
+
+	if not qry.split():
+		print("Your query entry doesn't include terms that exist in the model.")
+	elif not ans_1.split():
+		print("Your entry for first answer doesn't include terms that exist in the model")
+	elif not ans_2.split():
+		print("Your entry for second answer doesn't include terms that exist in the model")
 	else:
-		response = stub.semantic_modeling(DSSMRequest(qry = args.qry, ans1 = args.ans1, ans2 = args.ans2))
+		response = stub.semantic_modeling(DSSMRequest(qry = qry, ans1 = ans_1, ans2 = ans_2))
 		print("Query to Answer similarity: ", response.qry_ans_similarity)
 		print("Query to Answer 2 similarity: ", response.qry_ans2_similarity)
 		print("\"", max(args.ans1, args.ans2), "\" is a better answer for \"", args.qry, "\"")
